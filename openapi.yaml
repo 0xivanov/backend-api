@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: Car Maintenance API
+  version: 1.0.0
+paths:
+  /cars:
+    get:
+      summary: Get a list of cars
+      responses:
+        '200':
+          description: A list of cars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+  /garages:
+    get:
+      summary: Get a list of garages
+      responses:
+        '200':
+          description: A list of garages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Garage'
+components:
+  schemas:
+    Car:
+      type: object
+      properties:
+        id:
+          type: integer
+        make:
+          type: string
+        model:
+          type: string
+        productionYear:
+          type: integer
+        licensePlate:
+          type: string
+        garageIds:
+          type: array
+          items:
+            type: integer
+        garages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Garage'
+    Garage:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        location:
+          type: string
+        city:
+          type: string
+        capacity:
+          type: integer

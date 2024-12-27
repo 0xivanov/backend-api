@@ -4,11 +4,18 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/0xivanov/backend-api/docs"
 	"github.com/0xivanov/backend-api/internal/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+// @title Car Maintenance API
+// @version 1.0
+// @description This is a sample server for car maintenance.
+// @host localhost:8088
+// @BasePath /
 func main() {
 	router := mux.NewRouter()
 
@@ -36,6 +43,9 @@ func main() {
 	router.HandleFunc("/maintenance/{id}", h.GetMaintenanceById).Methods("GET")
 	router.HandleFunc("/maintenance/{id}", h.UpdateMaintenance).Methods("PUT")
 	router.HandleFunc("/maintenance/{id}", h.DeleteMaintenance).Methods("DELETE")
+
+	// Swagger route
+	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},

@@ -32,6 +32,20 @@ func NewHandlers() *Handlers {
 }
 
 // Car handlers
+
+// GetAllCars godoc
+// @Summary Get all cars
+// @Description Get a list of cars with optional filters
+// @Tags car-controller
+// @Accept json
+// @Produce json
+// @Param carMake query string false "Filter by car make"
+// @Param garageId query int64 false "Filter by garage ID"
+// @Param fromYear query int32 false "Filter by production year from"
+// @Param toYear query int32 false "Filter by production year to"
+// @Success 200 {array} models.Car
+// @Failure 400 {string} string "Bad request"
+// @Router /cars [get]
 func (h *Handlers) GetAllCars(w http.ResponseWriter, r *http.Request) {
 	carMake := r.URL.Query().Get("carMake")
 	garageIDStr := r.URL.Query().Get("garageId")
@@ -79,6 +93,16 @@ func (h *Handlers) GetAllCars(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cars)
 }
 
+// CreateCar godoc
+// @Summary Create a new car
+// @Description Create a new car with the provided details
+// @Tags car-controller
+// @Accept json
+// @Produce json
+// @Param car body models.Car true "Car object"
+// @Success 200 {object} models.Car
+// @Failure 400 {string} string "Bad request"
+// @Router /cars [post]
 func (h *Handlers) CreateCar(w http.ResponseWriter, r *http.Request) {
 	var car models.Car
 	if err := json.NewDecoder(r.Body).Decode(&car); err != nil {
@@ -106,6 +130,17 @@ func (h *Handlers) CreateCar(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(car)
 }
 
+// GetCarById godoc
+// @Summary Get a car by ID
+// @Description Get details of a car by its ID
+// @Tags car-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Car ID"
+// @Success 200 {object} models.Car
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Car not found"
+// @Router /cars/{id} [get]
 func (h *Handlers) GetCarById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -124,6 +159,18 @@ func (h *Handlers) GetCarById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(car)
 }
 
+// UpdateCar godoc
+// @Summary Update a car by ID
+// @Description Update the details of a car by its ID
+// @Tags car-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Car ID"
+// @Param car body models.Car true "Updated car object"
+// @Success 200 {object} models.Car
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Car not found"
+// @Router /cars/{id} [put]
 func (h *Handlers) UpdateCar(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -150,6 +197,17 @@ func (h *Handlers) UpdateCar(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(car)
 }
 
+// DeleteCarById godoc
+// @Summary Delete a car by ID
+// @Description Delete a car from the system by its ID
+// @Tags car-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Car ID"
+// @Success 200 {boolean} boolean "Car deleted"
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Car not found"
+// @Router /cars/{id} [delete]
 func (h *Handlers) DeleteCarById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -169,6 +227,17 @@ func (h *Handlers) DeleteCarById(w http.ResponseWriter, r *http.Request) {
 }
 
 // Garage handlers
+
+// GetAllGarages godoc
+// @Summary Get all garages
+// @Description Get a list of garages with optional filters
+// @Tags garage-controller
+// @Accept json
+// @Produce json
+// @Param city query string false "Filter by city"
+// @Success 200 {array} models.Garage
+// @Failure 400 {string} string "Bad request"
+// @Router /garages [get]
 func (h *Handlers) GetAllGarages(w http.ResponseWriter, r *http.Request) {
 	city := r.URL.Query().Get("city")
 
@@ -184,6 +253,16 @@ func (h *Handlers) GetAllGarages(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(garages)
 }
 
+// CreateGarage godoc
+// @Summary Create a new garage
+// @Description Create a new garage with the provided details
+// @Tags garage-controller
+// @Accept json
+// @Produce json
+// @Param garage body models.Garage true "Garage object"
+// @Success 200 {object} models.Garage
+// @Failure 400 {string} string "Bad request"
+// @Router /garages [post]
 func (h *Handlers) CreateGarage(w http.ResponseWriter, r *http.Request) {
 	var garage models.Garage
 	if err := json.NewDecoder(r.Body).Decode(&garage); err != nil {
@@ -199,6 +278,17 @@ func (h *Handlers) CreateGarage(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(garage)
 }
 
+// GetGarageById godoc
+// @Summary Get a garage by ID
+// @Description Get details of a garage by its ID
+// @Tags garage-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Garage ID"
+// @Success 200 {object} models.Garage
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Garage not found"
+// @Router /garages/{id} [get]
 func (h *Handlers) GetGarageById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -217,6 +307,18 @@ func (h *Handlers) GetGarageById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(garage)
 }
 
+// UpdateGarage godoc
+// @Summary Update a garage by ID
+// @Description Update the details of a garage by its ID
+// @Tags garage-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Garage ID"
+// @Param garage body models.Garage true "Updated garage object"
+// @Success 200 {object} models.Garage
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Garage not found"
+// @Router /garages/{id} [put]
 func (h *Handlers) UpdateGarage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -243,6 +345,17 @@ func (h *Handlers) UpdateGarage(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(garage)
 }
 
+// DeleteGarageById godoc
+// @Summary Delete a garage by ID
+// @Description Delete a garage from the system by its ID
+// @Tags garage-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Garage ID"
+// @Success 200 {boolean} boolean "Garage deleted"
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Garage not found"
+// @Router /garages/{id} [delete]
 func (h *Handlers) DeleteGarageById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -262,6 +375,20 @@ func (h *Handlers) DeleteGarageById(w http.ResponseWriter, r *http.Request) {
 }
 
 // Maintenance handlers
+
+// GetAllMaintenances godoc
+// @Summary Get all maintenances
+// @Description Get a list of maintenances with optional filters
+// @Tags maintenance-controller
+// @Accept json
+// @Produce json
+// @Param carId query string false "Filter by car ID"
+// @Param garageId query string false "Filter by garage ID"
+// @Param startDate query string false "Filter by start date (YYYY-MM-DD)"
+// @Param endDate query string false "Filter by end date (YYYY-MM-DD)"
+// @Success 200 {array} models.Maintenance
+// @Failure 400 {string} string "Bad request"
+// @Router /maintenance [get]
 func (h *Handlers) GetAllMaintenances(w http.ResponseWriter, r *http.Request) {
 	carIDStr := r.URL.Query().Get("carId")
 	garageIDStr := r.URL.Query().Get("garageId")
@@ -303,6 +430,16 @@ func (h *Handlers) GetAllMaintenances(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(maintenances)
 }
 
+// CreateMaintenance godoc
+// @Summary Create a new maintenance
+// @Description Create a new maintenance record with the provided details
+// @Tags maintenance-controller
+// @Accept json
+// @Produce json
+// @Param maintenance body models.Maintenance true "Maintenance object"
+// @Success 200 {object} models.Maintenance
+// @Failure 400 {string} string "Bad request"
+// @Router /maintenance [post]
 func (h *Handlers) CreateMaintenance(w http.ResponseWriter, r *http.Request) {
 	var maintenance models.Maintenance
 	if err := json.NewDecoder(r.Body).Decode(&maintenance); err != nil {
@@ -318,6 +455,17 @@ func (h *Handlers) CreateMaintenance(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(maintenance)
 }
 
+// GetMaintenanceById godoc
+// @Summary Get a maintenance by ID
+// @Description Get details of a maintenance by its ID
+// @Tags maintenance-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Maintenance ID"
+// @Success 200 {object} models.Maintenance
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Maintenance not found"
+// @Router /maintenance/{id} [get]
 func (h *Handlers) GetMaintenanceById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -336,6 +484,18 @@ func (h *Handlers) GetMaintenanceById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(maintenance)
 }
 
+// UpdateMaintenance godoc
+// @Summary Update a maintenance by ID
+// @Description Update the details of a maintenance by its ID
+// @Tags maintenance-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Maintenance ID"
+// @Param maintenance body models.Maintenance true "Updated maintenance object"
+// @Success 200 {object} models.Maintenance
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Maintenance not found"
+// @Router /maintenance/{id} [put]
 func (h *Handlers) UpdateMaintenance(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -363,6 +523,17 @@ func (h *Handlers) UpdateMaintenance(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(maintenance)
 }
 
+// DeleteMaintenance godoc
+// @Summary Delete a maintenance by ID
+// @Description Delete a maintenance from the system by its ID
+// @Tags maintenance-controller
+// @Accept json
+// @Produce json
+// @Param id path int64 true "Maintenance ID"
+// @Success 200 {boolean} boolean "Maintenance deleted"
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "Maintenance not found"
+// @Router /maintenance/{id} [delete]
 func (h *Handlers) DeleteMaintenance(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)

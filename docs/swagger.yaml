@@ -1,0 +1,516 @@
+basePath: /
+definitions:
+  models.Car:
+    properties:
+      garageIds:
+        items:
+          type: integer
+        type: array
+      garages:
+        items:
+          $ref: '#/definitions/models.Garage'
+        type: array
+      id:
+        type: integer
+      licensePlate:
+        type: string
+      make:
+        type: string
+      model:
+        type: string
+      productionYear:
+        type: integer
+    type: object
+  models.CustomTime:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  models.Garage:
+    properties:
+      capacity:
+        type: integer
+      city:
+        type: string
+      id:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Maintenance:
+    properties:
+      carId:
+        type: string
+      carName:
+        type: string
+      garageId:
+        type: string
+      garageName:
+        type: string
+      id:
+        type: integer
+      scheduledDate:
+        $ref: '#/definitions/models.CustomTime'
+      serviceType:
+        type: string
+    type: object
+host: localhost:8088
+info:
+  contact: {}
+  description: This is a sample server for car maintenance.
+  title: Car Maintenance API
+  version: "1.0"
+paths:
+  /cars:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of cars with optional filters
+      parameters:
+      - description: Filter by car make
+        in: query
+        name: carMake
+        type: string
+      - description: Filter by garage ID
+        in: query
+        name: garageId
+        type: integer
+      - description: Filter by production year from
+        in: query
+        name: fromYear
+        type: integer
+      - description: Filter by production year to
+        in: query
+        name: toYear
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Car'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Get all cars
+      tags:
+      - car-controller
+    post:
+      consumes:
+      - application/json
+      description: Create a new car with the provided details
+      parameters:
+      - description: Car object
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/models.Car'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Car'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Create a new car
+      tags:
+      - car-controller
+  /cars/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a car from the system by its ID
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car deleted
+          schema:
+            type: boolean
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Car not found
+          schema:
+            type: string
+      summary: Delete a car by ID
+      tags:
+      - car-controller
+    get:
+      consumes:
+      - application/json
+      description: Get details of a car by its ID
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Car'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Car not found
+          schema:
+            type: string
+      summary: Get a car by ID
+      tags:
+      - car-controller
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a car by its ID
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated car object
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/models.Car'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Car'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Car not found
+          schema:
+            type: string
+      summary: Update a car by ID
+      tags:
+      - car-controller
+  /garages:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of garages with optional filters
+      parameters:
+      - description: Filter by city
+        in: query
+        name: city
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Garage'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Get all garages
+      tags:
+      - garage-controller
+    post:
+      consumes:
+      - application/json
+      description: Create a new garage with the provided details
+      parameters:
+      - description: Garage object
+        in: body
+        name: garage
+        required: true
+        schema:
+          $ref: '#/definitions/models.Garage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Garage'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Create a new garage
+      tags:
+      - garage-controller
+  /garages/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a garage from the system by its ID
+      parameters:
+      - description: Garage ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Garage deleted
+          schema:
+            type: boolean
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Garage not found
+          schema:
+            type: string
+      summary: Delete a garage by ID
+      tags:
+      - garage-controller
+    get:
+      consumes:
+      - application/json
+      description: Get details of a garage by its ID
+      parameters:
+      - description: Garage ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Garage'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Garage not found
+          schema:
+            type: string
+      summary: Get a garage by ID
+      tags:
+      - garage-controller
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a garage by its ID
+      parameters:
+      - description: Garage ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated garage object
+        in: body
+        name: garage
+        required: true
+        schema:
+          $ref: '#/definitions/models.Garage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Garage'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Garage not found
+          schema:
+            type: string
+      summary: Update a garage by ID
+      tags:
+      - garage-controller
+  /maintenance:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of maintenances with optional filters
+      parameters:
+      - description: Filter by car ID
+        in: query
+        name: carId
+        type: string
+      - description: Filter by garage ID
+        in: query
+        name: garageId
+        type: string
+      - description: Filter by start date (YYYY-MM-DD)
+        in: query
+        name: startDate
+        type: string
+      - description: Filter by end date (YYYY-MM-DD)
+        in: query
+        name: endDate
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Maintenance'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Get all maintenances
+      tags:
+      - maintenance-controller
+    post:
+      consumes:
+      - application/json
+      description: Create a new maintenance record with the provided details
+      parameters:
+      - description: Maintenance object
+        in: body
+        name: maintenance
+        required: true
+        schema:
+          $ref: '#/definitions/models.Maintenance'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Maintenance'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Create a new maintenance
+      tags:
+      - maintenance-controller
+  /maintenance/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a maintenance from the system by its ID
+      parameters:
+      - description: Maintenance ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Maintenance deleted
+          schema:
+            type: boolean
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Maintenance not found
+          schema:
+            type: string
+      summary: Delete a maintenance by ID
+      tags:
+      - maintenance-controller
+    get:
+      consumes:
+      - application/json
+      description: Get details of a maintenance by its ID
+      parameters:
+      - description: Maintenance ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Maintenance'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Maintenance not found
+          schema:
+            type: string
+      summary: Get a maintenance by ID
+      tags:
+      - maintenance-controller
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a maintenance by its ID
+      parameters:
+      - description: Maintenance ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated maintenance object
+        in: body
+        name: maintenance
+        required: true
+        schema:
+          $ref: '#/definitions/models.Maintenance'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Maintenance'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Maintenance not found
+          schema:
+            type: string
+      summary: Update a maintenance by ID
+      tags:
+      - maintenance-controller
+swagger: "2.0"
